@@ -2,709 +2,167 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <title>Agendamento com o Tutor Fernando Galdino</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamento Escolar</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
             padding: 20px;
-            line-height: 1.6;
         }
-        
-        /* Estilos para o calendário */
-        .date-range {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+        .container {
+            max-width: 600px;
+            background: white;
+            margin: auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        img.logo {
+            width: 100px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        h2 {
             text-align: center;
+            margin-bottom: 10px;
+            color: #2c3e50;
         }
-        
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+        p.subtitle {
+            text-align: center;
+            color: #555;
             margin-bottom: 30px;
+            font-size: 16px;
         }
-        
-        .day {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-        }
-        
-        .day-title {
-            text-align: center;
-            margin-bottom: 15px;
-            font-weight: bold;
-            font-size: 18px;
-            color: #343a40;
-        }
-        
-        .time-slot {
-            padding: 10px;
-            margin: 8px 0;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .time-slot.available {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .time-slot.available:hover {
-            background-color: #c3e6cb;
-            transform: translateY(-2px);
-        }
-        
-        .time-slot.booked {
-            background-color: #f8d7da;
-            color: #721c24;
-            cursor: not-allowed;
-        }
-        
-        .time-slot.unavailable {
-            background-color: #e2e3e5;
-            color: #6c757d;
-            cursor: not-allowed;
-        }
-        
-        /* Estilos para formulários */
-        .form-container {
-            display: none;
-            border: 1px solid #ddd;
-            padding: 25px;
-            border-radius: 5px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
-            color: #495057;
         }
-        
-        .required:after {
-            content: " *";
-            color: #dc3545;
-        }
-        
         input, select {
             width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        input:focus, select:focus {
-            border-color: #80bdff;
-            outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
-        }
-        
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        
-        button:hover {
-            background-color: #0069d9;
-        }
-        
-        button.secondary {
-            background-color: #6c757d;
-        }
-        
-        button.secondary:hover {
-            background-color: #5a6268;
-        }
-        
-        button.danger {
-            background-color: #dc3545;
-        }
-        
-        button.danger:hover {
-            background-color: #c82333;
-        }
-        
-        /* Estilos para mensagens e confirmações */
-        #confirmation {
-            background-color: #d4edda;
-            padding: 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            color: #155724;
-            display: none;
-        }
-        
-        .error {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        /* Estilos para o painel administrativo */
-        .admin-panel {
-            margin-top: 40px;
-            padding: 25px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            display: none;
-        }
-        
-        .login-panel {
-            margin: 25px 0;
-            padding: 20px;
-            background-color: #e9ecef;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .appointment-item {
+            padding: 12px;
             margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .status-select {
-            padding: 8px;
-            border-radius: 4px;
             border: 1px solid #ced4da;
-            background-color: white;
-        }
-        
-        .status-agendado {
-            color: #28a745;
-            font-weight: bold;
-        }
-        
-        .status-cancelado {
-            color: #dc3545;
-            font-weight: bold;
-        }
-        
-        .status-message {
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 4px;
-            display: none;
-        }
-        
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        /* Botão de acesso administrativo */
-        .admin-btn {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 20px 0;
+            border-radius: 8px;
             font-size: 16px;
-            transition: all 0.3s;
         }
-        
-        .admin-btn:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px);
+        button {
+            background-color: #2e86de;
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .calendar {
-                grid-template-columns: 1fr;
-            }
+        button:hover {
+            background-color: #1b4f72;
+        }
+        .footer-note {
+            margin-top: 20px;
+            font-size: 13px;
+            text-align: center;
+            color: #888;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="date-range">
-            <h2>Período de Agendamento</h2>
-            <p>19/05/2025 a 30/05/2025</p>
-        </div>
-        
-        <h1>Agendamento de Reuniões Pedagógicas</h1>
-        <p>Selecione um horário disponível para sua reunião (30 minutos):</p>
-        
-        <div class="calendar" id="calendar">
-            <!-- Os dias e horários serão gerados pelo JavaScript -->
-        </div>
-        
-        <div class="form-container" id="bookingForm">
-            <h2>Agendar Horário</h2>
-            <form id="appointmentForm">
-                <div class="form-group">
-                    <label for="studentName" class="required">Nome do Aluno:</label>
-                    <input type="text" id="studentName" required>
-                </div>
-                <div class="form-group">
-                    <label for="parentName" class="required">Nome do Responsável:</label>
-                    <input type="text" id="parentName" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email">
-                </div>
-                <div class="form-group">
-                    <label for="whatsapp" class="required">WhatsApp:</label>
-                    <input type="tel" id="whatsapp" placeholder="(xx)xxxxx-xxxx" required>
-                    <div class="error" id="whatsappError">Formato inválido. Use (xx)xxxxx-xxxx</div>
-                </div>
-                <input type="hidden" id="selectedTime">
-                <input type="hidden" id="selectedSlot">
-                <div class="form-group">
-                    <button type="submit">Confirmar Agendamento</button>
-                    <button type="button" id="cancelBooking" class="secondary">Cancelar</button>
-                </div>
-            </form>
-        </div>
-        
-        <div id="confirmation">
-            <h2>Agendamento Confirmado!</h2>
-            <p id="confirmationDetails"></p>
-            <button id="newBooking">Fazer Novo Agendamento</button>
-        </div>
-        
-        <button id="adminToggle" class="admin-btn">Acesso Administrativo</button>
-        
-        <div class="login-panel" id="loginPanel">
-            <h2>Login Administrativo</h2>
-            <div class="form-group">
-                <label for="adminUser">Usuário:</label>
-                <input type="text" id="adminUser">
-            </div>
-            <div class="form-group">
-                <label for="adminPass">Senha:</label>
-                <input type="password" id="adminPass">
-            </div>
-            <button id="loginBtn">Entrar</button>
-            <div id="loginError" class="error-message" style="display:none;margin-top:15px;">Credenciais inválidas!</div>
-        </div>
-        
-        <div class="admin-panel" id="adminPanel">
-            <h2>Painel Administrativo</h2>
-            <div id="appointmentsList">
-                <!-- Agendamentos serão carregados aqui -->
-            </div>
-        </div>
+        <img src="logoescola.png" alt="Logo da Escola" class="logo">
+        <h2>Agendamento de Reunião</h2>
+        <p class="subtitle">
+            Reunião com o tutor <strong>Fernando Galdino</strong><br>
+            Assunto: <em>rendimento acadêmico do aluno</em>
+        </p>
+
+        <form id="formAgenda">
+            <label for="nomeResponsavel">Nome do responsável:</label>
+            <input type="text" id="nomeResponsavel" placeholder="Digite seu nome completo" required>
+
+            <label for="nomeAluno">Nome do aluno:</label>
+            <input type="text" id="nomeAluno" placeholder="Nome do(a) aluno(a)" required>
+
+            <label for="data">Escolha a data da reunião:</label>
+            <input type="date" id="data" required min="2025-05-19" max="2025-05-30">
+
+            <label for="horario">Selecione um horário disponível:</label>
+            <select id="horario" required>
+                <option value="">Escolha uma data primeiro</option>
+            </select>
+
+            <button type="submit">Enviar pedido via WhatsApp</button>
+        </form>
+
+        <p class="footer-note">
+            Após preencher o formulário, você será redirecionado ao WhatsApp com a mensagem pronta para envio.
+        </p>
     </div>
 
-    <!-- Inclua a biblioteca do Supabase -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
     <script>
-        // Configuração do Supabase
-        const supabaseUrl = 'https://jyttorvktiowgbbgrnle.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5dHRvcnZrdGlvd2diYmdybmxlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzU5MDg1NCwiZXhwIjoyMDYzMTY2ODU0fQ.gJ4HEVjf7lWaxtOMcXJ1Tv587fB8ETrdnyroaeUDIss';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-        
-        // Range de datas (19/05/2025 a 30/05/2025)
-        const startDate = new Date(2025, 4, 19); // Mês é 0-based (4 = maio)
-        const endDate = new Date(2025, 4, 30);
-        
-        // Horários específicos por dia (conforme seu pedido)
-        const schedule = {
-            'Segunda': {
-                available: [
-                    '08:40 - 09:30',
-                    '09:50 - 10:40'
-                ]
-            },
-            'Terça': {
-                available: [
-                    '12:30 - 13:20',
-                    '13:20 - 14:10',
-                    '14:10 - 15:00',
-                    '15:00 - 16:00'
-                ]
-            },
-            'Quarta': {
-                available: [
-                    '12:30 - 13:20',
-                    '15:00 - 16:00'
-                ]
-            },
-            'Quinta': {
-                available: [
-                    '10:40 - 11:30',
-                    '15:00 - 16:00'
-                ]
-            },
-            'Sexta': {
-                available: [
-                    '07:00 - 07:50',
-                    '08:40 - 09:30',
-                    '14:10 - 15:00',
-                    '15:00 - 16:00'
-                ]
-            }
+        const horariosPorDia = {
+            'segunda-feira': ['08:40 - 09:30', '09:50 - 10:40'],
+            'terça-feira': ['12:30 - 13:20', '13:20 - 14:10', '14:10 - 15:00', '15:00 - 16:00'],
+            'quarta-feira': ['12:30 - 13:20', '15:00 - 16:00'],
+            'quinta-feira': ['10:40 - 11:30', '15:00 - 16:00'],
+            'sexta-feira': ['07:00 - 07:50', '08:40 - 09:30', '14:10 - 15:00', '15:00 - 16:00']
         };
-        
-        // Variáveis globais
-        let bookedSlots = [];
-        let isAdminLoggedIn = false;
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadBookedAppointments();
-            generateCalendar();
-            setupEventListeners();
-            
-            // Máscara para WhatsApp
-            document.getElementById('whatsapp').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 0) {
-                    value = '(' + value;
-                    if (value.length > 3) {
-                        value = value.substring(0, 3) + ')' + value.substring(3);
-                    }
-                    if (value.length > 9) {
-                        value = value.substring(0, 9) + '-' + value.substring(9, 13);
-                    }
-                }
-                e.target.value = value;
-            });
-        });
-        
-        // Carrega os agendamentos existentes (apenas os ativos)
-        async function loadBookedAppointments() {
-            const { data, error } = await supabase
-                .from('appointments')
-                .select('date, time_slot')
-                .eq('status', 'agendado'); // Só considera agendados como ocupados
-            
-            if (!error) {
-                bookedSlots = data.map(appointment => {
-                    return {
-                        date: new Date(appointment.date),
-                        slot: appointment.time_slot
-                    };
+        const nomesDiasSemana = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+
+        const dataInput = document.getElementById('data');
+        const horarioSelect = document.getElementById('horario');
+
+        dataInput.addEventListener('change', () => {
+            const data = new Date(dataInput.value + 'T00:00');
+            const dia = nomesDiasSemana[data.getDay()];
+            const opcoes = horariosPorDia[dia] || [];
+
+            horarioSelect.innerHTML = '';
+
+            if (opcoes.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'Nenhum horário disponível para esse dia';
+                horarioSelect.appendChild(opt);
+            } else {
+                const optPadrao = document.createElement('option');
+                optPadrao.value = '';
+                optPadrao.textContent = 'Selecione um horário';
+                horarioSelect.appendChild(optPadrao);
+
+                opcoes.forEach(h => {
+                    const opt = document.createElement('option');
+                    opt.value = h;
+                    opt.textContent = h;
+                    horarioSelect.appendChild(opt);
                 });
             }
-        }
-        
-        // Gera o calendário com horários
-        function generateCalendar() {
-            const calendarEl = document.getElementById('calendar');
-            calendarEl.innerHTML = '';
-            
-            // Dias da semana a serem exibidos
-            const daysToShow = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
-            
-            // Cria os dias da semana
-            daysToShow.forEach(dayName => {
-                const daySchedule = schedule[dayName];
-                const dayEl = document.createElement('div');
-                dayEl.className = 'day';
-                
-                const dayTitle = document.createElement('div');
-                dayTitle.className = 'day-title';
-                dayTitle.textContent = dayName;
-                dayEl.appendChild(dayTitle);
-                
-                if (daySchedule.available.length === 0) {
-                    const unavailableEl = document.createElement('div');
-                    unavailableEl.className = 'time-slot unavailable';
-                    unavailableEl.textContent = 'Indisponível';
-                    dayEl.appendChild(unavailableEl);
-                } else {
-                    // Cria os slots de horário para cada dia
-                    daySchedule.available.forEach(slot => {
-                        const slotEl = document.createElement('div');
-                        slotEl.className = 'time-slot';
-                        
-                        // Verifica se o horário já está agendado
-                        const isBooked = bookedSlots.some(booked => {
-                            return booked.slot === slot && isSameDay(booked.date, new Date());
-                        });
-                        
-                        if (isBooked) {
-                            slotEl.classList.add('booked');
-                            slotEl.textContent = `${slot} (Ocupado)`;
-                        } else {
-                            slotEl.classList.add('available');
-                            slotEl.textContent = slot;
-                            slotEl.addEventListener('click', () => openBookingForm(dayName, slot));
-                        }
-                        
-                        dayEl.appendChild(slotEl);
-                    });
-                }
-                
-                calendarEl.appendChild(dayEl);
-            });
-        }
-        
-        // Verifica se duas datas são no mesmo dia
-        function isSameDay(date1, date2) {
-            return date1.getFullYear() === date2.getFullYear() &&
-                   date1.getMonth() === date2.getMonth() &&
-                   date1.getDate() === date2.getDate();
-        }
-        
-        // Abre o formulário de agendamento
-        function openBookingForm(day, timeSlot) {
-            // Encontra a próxima data correspondente ao dia da semana dentro do range
-            const daysMap = { 'Segunda': 1, 'Terça': 2, 'Quarta': 3, 'Quinta': 4, 'Sexta': 5 };
-            const targetDay = daysMap[day];
-            
-            let date = new Date(startDate);
-            while (date <= endDate) {
-                if (date.getDay() === targetDay) {
-                    break;
-                }
-                date.setDate(date.getDate() + 1);
-            }
-            
-            // Se não encontrou dentro do range, usa a primeira data possível após o range
-            if (date > endDate) {
-                date = new Date(startDate);
-                while (date.getDay() !== targetDay) {
-                    date.setDate(date.getDate() + 1);
-                }
-            }
-            
-            document.getElementById('selectedTime').value = date.getTime();
-            document.getElementById('selectedSlot').value = timeSlot;
-            document.getElementById('calendar').style.display = 'none';
-            document.getElementById('bookingForm').style.display = 'block';
-        }
-        
-        // Valida o formato do WhatsApp
-        function validateWhatsApp(whatsapp) {
-            const regex = /^\(\d{2}\)\d{5}-\d{4}$/;
-            return regex.test(whatsapp);
-        }
-        
-        // Configura os listeners de eventos
-        function setupEventListeners() {
-            // Cancelar agendamento
-            document.getElementById('cancelBooking').addEventListener('click', () => {
-                document.getElementById('bookingForm').style.display = 'none';
-                document.getElementById('calendar').style.display = 'grid';
-            });
-            
-            // Novo agendamento após confirmação
-            document.getElementById('newBooking').addEventListener('click', () => {
-                document.getElementById('confirmation').style.display = 'none';
-                document.getElementById('calendar').style.display = 'grid';
-                document.getElementById('appointmentForm').reset();
-                location.reload(); // Atualiza a lista de horários
-            });
-            
-            // Envio do formulário
-            document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                // Valida WhatsApp
-                const whatsapp = document.getElementById('whatsapp').value;
-                if (!validateWhatsApp(whatsapp)) {
-                    document.getElementById('whatsappError').style.display = 'block';
-                    return;
-                } else {
-                    document.getElementById('whatsappError').style.display = 'none';
-                }
-                
-                await bookAppointment();
-            });
-            
-            // Controle do painel administrativo
-            document.getElementById('adminToggle').addEventListener('click', () => {
-                if (isAdminLoggedIn) {
-                    adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
-                    loginPanel.style.display = 'none';
-                } else {
-                    loginPanel.style.display = loginPanel.style.display === 'none' ? 'block' : 'none';
-                    adminPanel.style.display = 'none';
-                }
-            });
-            
-            // Login administrativo
-            document.getElementById('loginBtn').addEventListener('click', () => {
-                const user = document.getElementById('adminUser').value;
-                const pass = document.getElementById('adminPass').value;
-                
-                if (user === 'admin' && pass === 'admin') {
-                    isAdminLoggedIn = true;
-                    loginPanel.style.display = 'none';
-                    adminPanel.style.display = 'block';
-                    loadAllAppointments();
-                    document.getElementById('loginError').style.display = 'none';
-                } else {
-                    document.getElementById('loginError').style.display = 'block';
-                }
-            });
-        }
-        
-        // Realiza o agendamento
-        async function bookAppointment() {
-            const studentName = document.getElementById('studentName').value;
-            const parentName = document.getElementById('parentName').value;
-            const email = document.getElementById('email').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            const selectedDate = new Date(parseInt(document.getElementById('selectedTime').value));
-            const timeSlot = document.getElementById('selectedSlot').value;
-            
-            // Formata a data para incluir o horário (usamos o início do slot)
-            const [startTime] = timeSlot.split(' - ');
-            const [hours, minutes] = startTime.split(':').map(Number);
-            selectedDate.setHours(hours, minutes, 0, 0);
-            
-            // Insere no Supabase
-            const { data, error } = await supabase
-                .from('appointments')
-                .insert([
-                    {
-                        student_name: studentName,
-                        parent_name: parentName,
-                        email: email,
-                        phone: whatsapp,
-                        date: selectedDate.toISOString(),
-                        time_slot: timeSlot,
-                        status: 'agendado' // Status padrão
-                    }
-                ]);
-            
-            if (!error) {
-                // Mostra confirmação
-                document.getElementById('bookingForm').style.display = 'none';
-                document.getElementById('confirmationDetails').innerHTML = 
-                    `<strong>Aluno:</strong> ${studentName}<br>
-                     <strong>Responsável:</strong> ${parentName}<br>
-                     <strong>Data:</strong> ${selectedDate.toLocaleDateString('pt-BR')}<br>
-                     <strong>Horário:</strong> ${timeSlot}<br>
-                     <strong>WhatsApp:</strong> ${whatsapp}`;
-                document.getElementById('confirmation').style.display = 'block';
-            } else {
-                alert('Erro ao agendar. Por favor, tente novamente.');
-                console.error(error);
-            }
-        }
-        
-        // Função para carregar todos os agendamentos (admin)
-        async function loadAllAppointments() {
-            const { data, error } = await supabase
-                .from('appointments')
-                .select('*')
-                .order('date', { ascending: true });
-            
-            if (!error) {
-                renderAppointmentsList(data);
-            } else {
-                console.error('Erro ao carregar agendamentos:', error);
-            }
-        }
-        
-        // Função para renderizar a lista de agendamentos (admin)
-        function renderAppointmentsList(appointments) {
-            const listEl = document.getElementById('appointmentsList');
-            listEl.innerHTML = '';
-            
-            if (appointments.length === 0) {
-                listEl.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
+        });
+
+        document.getElementById('formAgenda').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nomeResponsavel = document.getElementById('nomeResponsavel').value.trim();
+            const nomeAluno = document.getElementById('nomeAluno').value.trim();
+            const data = document.getElementById('data').value;
+            const horario = document.getElementById('horario').value;
+
+            if (!nomeResponsavel || !nomeAluno || !data || !horario) {
+                alert('Por favor, preencha todos os campos!');
                 return;
             }
-            
-            appointments.forEach(appointment => {
-                const date = new Date(appointment.date);
-                const apptEl = document.createElement('div');
-                apptEl.className = 'appointment-item';
-                
-                apptEl.innerHTML = `
-                    <p><strong>Aluno:</strong> ${appointment.student_name}</p>
-                    <p><strong>Responsável:</strong> ${appointment.parent_name}</p>
-                    <p><strong>Data:</strong> ${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</p>
-                    <p><strong>WhatsApp:</strong> ${appointment.phone}</p>
-                    <p><strong>Status:</strong>
-                        <select class="status-select" data-id="${appointment.id}">
-                            <option value="agendado" ${appointment.status === 'agendado' ? 'selected' : ''}>Agendado</option>
-                            <option value="cancelado" ${appointment.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
-                        </select>
-                    </p>
-                    <div class="status-message" id="statusMsg${appointment.id}"></div>
-                `;
-                
-                listEl.appendChild(apptEl);
-                
-                // Adiciona evento para mudança de status
-                const select = apptEl.querySelector('.status-select');
-                select.addEventListener('change', async (e) => {
-                    await updateAppointmentStatus(
-                        e.target.getAttribute('data-id'), 
-                        e.target.value
-                    );
-                });
-            });
-        }
-        
-        // Função para atualizar o status do agendamento (admin)
-        async function updateAppointmentStatus(appointmentId, newStatus) {
-            const { error } = await supabase
-                .from('appointments')
-                .update({ status: newStatus })
-                .eq('id', appointmentId);
-            
-            const statusMsg = document.getElementById(`statusMsg${appointmentId}`);
-            
-            if (!error) {
-                statusMsg.textContent = `Status atualizado para ${newStatus === 'agendado' ? 'Agendado' : 'Cancelado'}`;
-                statusMsg.className = 'status-message success-message';
-                statusMsg.style.display = 'block';
-                
-                // Recarrega os agendamentos e o calendário
-                await loadBookedAppointments();
-                generateCalendar();
-                
-                // Atualiza a lista de agendamentos após 2 segundos
-                setTimeout(() => {
-                    loadAllAppointments();
-                }, 2000);
-            } else {
-                statusMsg.textContent = 'Erro ao atualizar status!';
-                statusMsg.className = 'status-message error-message';
-                statusMsg.style.display = 'block';
-                console.error('Erro ao atualizar agendamento:', error);
-            }
-        }
+
+            const dataFormatada = new Date(data).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' });
+
+            const mensagem = `Olá, tutor Fernando Galdino.%0A%0AGostaria de agendar uma reunião sobre o rendimento acadêmico do aluno:%0A👤 Responsável: ${nomeResponsavel}%0A🧑 Aluno: ${nomeAluno}%0A📅 Data: ${dataFormatada}%0A🕓 Horário: ${horario}%0A%0ADesde já, agradeço!`;
+
+            const numeroWhatsApp = '5519996470380';
+            const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+            window.open(url, '_blank');
+        });
     </script>
 </body>
 </html>

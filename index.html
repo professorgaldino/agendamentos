@@ -111,7 +111,7 @@
             'sexta-feira': ['07:00 - 07:50', '08:40 - 09:30', '14:10 - 15:00', '15:00 - 16:00']
         };
 
-        const nomesDiasSemana = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira'];
+        const nomesDiasSemana = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
 
         const dataInput = document.getElementById('data');
         const horarioSelect = document.getElementById('horario');
@@ -121,7 +121,6 @@
             const diaSemana = nomesDiasSemana[dataSelecionada.getDay()];
             const horariosDisponiveis = horariosPorDia[diaSemana] || [];
 
-            // Recupera os horários já agendados do localStorage
             const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
             const horariosAgendados = agendamentos[dataInput.value] || [];
 
@@ -167,7 +166,6 @@
                 return;
             }
 
-            // Atualiza o localStorage com o novo agendamento
             const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
             if (!agendamentos[data]) {
                 agendamentos[data] = [];
@@ -185,7 +183,7 @@
             const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
             window.open(url, '_blank');
 
-            carregarHorarios(); // Atualiza os horários após envio
+            carregarHorarios(); // Atualiza os horários após o envio
         });
     </script>
 </body>

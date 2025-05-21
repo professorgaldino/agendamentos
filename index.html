@@ -1,190 +1,243 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Agendamento com o Tutor Fernando Galdino</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            background: white;
-            margin: auto;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        img.logo {
-            width: 100px;
-            display: block;
-            margin: 0 auto 20px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        p.subtitle {
-            text-align: center;
-            color: #555;
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #2e86de;
-            color: white;
-            padding: 14px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            width: 100%;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #1b4f72;
-        }
-        .footer-note {
-            margin-top: 20px;
-            font-size: 13px;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamento</title>
+  <style>
+    :root {
+      --cor-primaria: #4CAF50;
+      --cor-fundo: #f0f4f8;
+      --cor-texto: #333;
+      --cor-botao-hover: #45a049;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--cor-fundo);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header img {
+      max-width: 150px;
+      height: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--cor-texto);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: var(--cor-texto);
+      font-weight: 500;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: var(--cor-primaria);
+      color: white;
+      border: none;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--cor-botao-hover);
+    }
+
+    #mensagem {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      input, select, button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="logoescola.png" alt="Logo da Escola" class="logo">
-        <h2>Agendamento de Reunião</h2>
-        <p class="subtitle">
-            Reunião com o tutor <strong>Fernando Galdino</strong><br>
-            Assunto: <em>rendimento acadêmico do aluno</em>
-        </p>
 
-        <form id="formAgenda">
-            <label for="nomeResponsavel">Nome do responsável:</label>
-            <input type="text" id="nomeResponsavel" placeholder="Digite seu nome completo" required>
+  <div class="container">
+    <header>
+      <img src="logoescola.png" alt="Logo da Escola">
+    </header>
 
-            <label for="nomeAluno">Nome do aluno:</label>
-            <input type="text" id="nomeAluno" placeholder="Nome do(a) aluno(a)" required>
+    <h1>Agendamento</h1>
 
-            <label for="data">Escolha a data da reunião:</label>
-            <input type="date" id="data" required min="2025-05-19" max="2025-05-30">
+    <label for="responsavel">Nome do responsável:</label>
+    <input type="text" id="responsavel" placeholder="Digite seu nome">
 
-            <label for="horario">Selecione um horário disponível:</label>
-            <select id="horario" required>
-                <option value="">Escolha uma data primeiro</option>
-            </select>
+    <label for="aluno">Nome do aluno:</label>
+    <input type="text" id="aluno" placeholder="Digite o nome do aluno">
 
-            <button type="submit">Enviar pedido via WhatsApp</button>
-        </form>
+    <label for="data">Selecione a data:</label>
+    <input type="date" id="data">
 
-        <p class="footer-note">
-            Após preencher o formulário, você será redirecionado ao WhatsApp com a mensagem pronta para envio.
-        </p>
-    </div>
+    <label for="horario">Selecione o horário:</label>
+    <select id="horario">
+      <option value="">Selecione uma data primeiro</option>
+    </select>
 
-    <script>
-        const horariosPorDia = {
-            'segunda-feira': ['08:40 - 09:30', '09:50 - 10:40'],
-            'terça-feira': ['12:30 - 13:20', '13:20 - 14:10', '14:10 - 15:00', '15:00 - 16:00'],
-            'quarta-feira': ['12:30 - 13:20', '15:00 - 16:00'],
-            'quinta-feira': ['10:40 - 11:30', '15:00 - 16:00'],
-            'sexta-feira': ['07:00 - 07:50', '08:40 - 09:30', '14:10 - 15:00', '15:00 - 16:00']
-        };
+    <button onclick="agendar()">Agendar</button>
 
-        const nomesDiasSemana = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    <p id="mensagem"></p>
+  </div>
 
-        const dataInput = document.getElementById('data');
-        const horarioSelect = document.getElementById('horario');
+  <script>
+    const dataInput = document.getElementById('data');
+    const horarioSelect = document.getElementById('horario');
+    const mensagem = document.getElementById('mensagem');
 
-        function carregarHorarios() {
-            const dataSelecionada = new Date(dataInput.value + 'T00:00');
-            const diaSemana = nomesDiasSemana[dataSelecionada.getDay()];
-            const horariosDisponiveis = horariosPorDia[diaSemana] || [];
+    const nomesDiasSemana = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
 
-            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
-            const horariosAgendados = agendamentos[dataInput.value] || [];
+    const horariosPorDia = {
+      'segunda-feira': ['08:00', '10:00', '14:00'],
+      'terça-feira':   ['08:00', '10:00', '14:00'],
+      'quarta-feira':  ['08:00', '10:00', '14:00'],
+      'quinta-feira':  ['08:00', '10:00', '14:00'],
+      'sexta-feira':   ['08:00', '10:00', '14:00']
+    };
 
-            horarioSelect.innerHTML = '';
+    dataInput.addEventListener('change', carregarHorarios);
 
-            if (horariosDisponiveis.length === 0) {
-                horarioSelect.innerHTML = '<option value="">Nenhum horário disponível para esse dia</option>';
-            } else {
-                let hasDisponivel = false;
-                const optPadrao = document.createElement('option');
-                optPadrao.value = '';
-                optPadrao.textContent = 'Selecione um horário';
-                horarioSelect.appendChild(optPadrao);
+    function carregarHorarios() {
+      const dataSelecionada = dataInput.value;
+      if (!dataSelecionada) return;
 
-                horariosDisponiveis.forEach(horario => {
-                    if (!horariosAgendados.includes(horario)) {
-                        const opt = document.createElement('option');
-                        opt.value = horario;
-                        opt.textContent = horario;
-                        horarioSelect.appendChild(opt);
-                        hasDisponivel = true;
-                    }
-                });
+      const [ano, mes, dia] = dataSelecionada.split('-').map(Number);
+      const data = new Date(ano, mes - 1, dia);
+      const diaSemana = nomesDiasSemana[data.getDay()];
+      const horariosDisponiveis = horariosPorDia[diaSemana] || [];
 
-                if (!hasDisponivel) {
-                    horarioSelect.innerHTML = '<option value="">Todos os horários estão ocupados</option>';
-                }
-            }
-        }
+      const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
+      const horariosAgendados = agendamentos[dataSelecionada] || [];
 
-        dataInput.addEventListener('change', carregarHorarios);
+      horarioSelect.innerHTML = '';
 
-        document.getElementById('formAgenda').addEventListener('submit', function (e) {
-            e.preventDefault();
+      if (horariosDisponiveis.length === 0) {
+        horarioSelect.innerHTML = '<option value="">Nenhum horário disponível para esse dia</option>';
+      } else {
+        const optPadrao = document.createElement('option');
+        optPadrao.value = '';
+        optPadrao.textContent = 'Selecione um horário';
+        horarioSelect.appendChild(optPadrao);
 
-            const nomeResponsavel = document.getElementById('nomeResponsavel').value.trim();
-            const nomeAluno = document.getElementById('nomeAluno').value.trim();
-            const data = document.getElementById('data').value;
-            const horario = document.getElementById('horario').value;
-
-            if (!nomeResponsavel || !nomeAluno || !data || !horario) {
-                alert('Por favor, preencha todos os campos!');
-                return;
-            }
-
-            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
-            if (!agendamentos[data]) {
-                agendamentos[data] = [];
-            }
-            agendamentos[data].push(horario);
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-
-            const dataFormatada = new Date(data).toLocaleDateString('pt-BR', {
-                weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit'
-            });
-
-            const mensagem = `Olá, tutor Fernando Galdino.%0A%0AGostaria de agendar uma reunião sobre o rendimento acadêmico do aluno:%0A👤 Responsável: ${nomeResponsavel}%0A🧑 Aluno: ${nomeAluno}%0A📅 Data: ${dataFormatada}%0A🕓 Horário: ${horario}%0A%0ADesde já, agradeço!`;
-
-            const numeroWhatsApp = '5519996470380';
-            const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
-            window.open(url, '_blank');
-
-            carregarHorarios(); // Atualiza os horários após o envio
+        horariosDisponiveis.forEach(horario => {
+          if (!horariosAgendados.includes(horario)) {
+            const opt = document.createElement('option');
+            opt.value = horario;
+            opt.textContent = horario;
+            horarioSelect.appendChild(opt);
+          }
         });
-    </script>
+
+        if (horarioSelect.options.length === 1) {
+          horarioSelect.innerHTML = '<option value="">Todos os horários estão ocupados</option>';
+        }
+      }
+    }
+
+    function agendar() {
+      const responsavel = document.getElementById('responsavel').value.trim();
+      const aluno = document.getElementById('aluno').value.trim();
+      const dataSelecionada = dataInput.value;
+      const horarioSelecionado = horarioSelect.value;
+
+      if (!responsavel || !aluno || !dataSelecionada || !horarioSelecionado) {
+        mensagem.textContent = 'Por favor, preencha todos os campos.';
+        mensagem.style.color = 'red';
+        return;
+      }
+
+      const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
+      if (!agendamentos[dataSelecionada]) {
+        agendamentos[dataSelecionada] = [];
+      }
+
+      if (agendamentos[dataSelecionada].includes(horarioSelecionado)) {
+        mensagem.textContent = 'Esse horário já foi agendado!';
+        mensagem.style.color = 'red';
+        return;
+      }
+
+      agendamentos[dataSelecionada].push(horarioSelecionado);
+      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+      const dataFormatada = formatarDataComDia(dataSelecionada);
+      mensagem.textContent = `Agendamento feito para ${dataFormatada} às ${horarioSelecionado}.`;
+      mensagem.style.color = 'green';
+
+      const mensagemTexto =
+`Olá, tutor Fernando Galdino.
+
+Gostaria de agendar uma reunião sobre o rendimento acadêmico do aluno:
+👤 Responsável: ${responsavel}
+🧑 Aluno: ${aluno}
+📅 Data: ${dataFormatada}
+🕓 Horário: ${horarioSelecionado}
+
+Desde já, agradeço!`;
+
+      const numeroWhatsApp = '5519996470380';
+      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagemTexto)}`;
+      window.open(url, '_blank');
+
+      carregarHorarios();
+    }
+
+    function formatarDataComDia(dataISO) {
+      const [ano, mes, dia] = dataISO.split("-");
+      const data = new Date(ano, mes - 1, dia);
+      const diaSemana = nomesDiasSemana[data.getDay()];
+      return `${diaSemana} - ${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${ano}`;
+    }
+  </script>
+
 </body>
 </html>
